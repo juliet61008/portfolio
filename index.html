@@ -27,7 +27,6 @@
         <div class="collapse navbar-collapse" id="ftco-nav">
             <ul class="navbar-nav nav ml-auto">
                 <li class="nav-item"><a href="#home-section" class="nav-link"><span>Home</span></a></li>
-<!--                <li class="nav-item"><a href="#about-section" class="nav-link"><span>About</span></a></li>-->
                 <li class="nav-item"><a href="#education-section" class="nav-link"><span>Education</span></a></li>
                 <li class="nav-item"><a href="#projects-section" class="nav-link"><span>Projects</span></a></li>
                 <li class="nav-item"><a href="#contact-section" class="nav-link"><span>Contact</span></a></li>
@@ -87,12 +86,9 @@
                 <div class="counter-wrap ftco-animate d-flex mt-md-3">
                     <div class="text">
                         <p class="mb-4">
-                            <span class="yearNumber" data-number="4">0</span>
+                            <span class="yearNumber" data-number="4">4</span>
                             <span>년차 개발자</span>
                         </p>
-                        <!--							<p><a target="_blank"-->
-                        <!--									href="https://drive.google.com/file/d/1uJg0Yun35HWc4YsEKfEX5L6Uyik5MPl_/view?usp=sharing"-->
-                        <!--									class="btn btn-primary py-3 px-3">이력서 다운받기</a></p>-->
                     </div>
                 </div>
             </div>
@@ -105,7 +101,7 @@
             <div class="col-md d-flex justify-content-center counter-wrap ftco-animate">
                 <div class="block-18 shadow">
                     <div class="text">
-                        <strong id="codeDate" class="number" data-number="1545">0</strong>
+                        <strong id="codeDate" class="number" data-number="1545">1545</strong>
                         <span>코딩한 일수</span>
                     </div>
                 </div>
@@ -123,6 +119,7 @@
                         <li><a href="#page-2">Experience</a></li>
                         <li><a href="#page-3">Skills</a></li>
                         <li><a href="#page-4">Projects</a></li>
+                        <li><a href="#page-5">Challenges</a></li>
                     </ul>
                 </nav>
             </div>
@@ -315,6 +312,142 @@
                             <div><b class="text-dark">기술 스택: </b>Spring Boot, eGovFramework, MyBatis, Oracle, JSP</div>
                             <div><b class="text-dark">주요 기능: </b>결제 시스템, 알림 시스템, 증명서 관리</div>
                             <p>공공기관의 구매 시스템 유지보수 및 고도화 프로젝트로, KCP API를 활용한 결제/환불 시스템과 비즈엠 API를 활용한 카카오톡 알림 시스템을 아키텍처 설계부터 구현까지 E2E로 개발했습니다.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="page-5" class="page five">
+                    <h2 class="heading">Technical Challenges</h2>
+
+                    <!-- Challenge 1: JWT 토큰 갱신 -->
+                    <div class="resume-wrap d-flex ftco-animate">
+                        <div class="icon d-flex align-items-center justify-content-center">
+                            <span class="flaticon-ideas"></span>
+                        </div>
+                        <div class="text pl-3">
+                            <span class="challenge-badge">CJ CGV 프로젝트</span>
+                            <h2 class="challenge-title">Next.js SSR/CSR 환경에서의 JWT 토큰 자동 갱신</h2>
+
+                            <div class="challenge-section">
+                                <h4>문제 상황</h4>
+                                <p>Next.js의 서버 컴포넌트(SSR)와 클라이언트 컴포넌트(CSR) 환경에서 JWT 토큰 자동 갱신 로직을 구현하는 과정에서 어려움을 겪었습니다.</p>
+                                <ul>
+                                    <li>클라이언트에서 401 에러 시 토큰 갱신은 구현했지만, 서버 컴포넌트에서 쿠키를 직접 수정할 수 없는 문제</li>
+                                    <li>서버 컴포넌트는 클라이언트의 커스텀 fetch 함수를 사용할 수 없어 별도 갱신 로직 필요</li>
+                                    <li>페이지 이동 시 만료된 토큰으로 인한 인증 에러 발생</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-section">
+                                <h4>해결 방법</h4>
+                                <p><strong>1) 클라이언트 갱신 로직</strong></p>
+                                <ul>
+                                    <li>커스텀 fetch 함수로 401 에러 감지 및 자동 토큰 갱신 API 호출</li>
+                                    <li>새 토큰을 HttpOnly Cookie에 이중 암호화하여 저장</li>
+                                    <li>Bearer 헤더에 새 토큰을 담아 원래 요청 순차적으로 재실행</li>
+                                </ul>
+                                <p><strong>2) 서버 컴포넌트 갱신 로직</strong></p>
+                                <ul>
+                                    <li>middleware.ts 활용: 모든 페이지 진입 시 쿠키에서 토큰 추출 및 검증</li>
+                                    <li>토큰 만료 시간 체크(exp claim 확인)</li>
+                                    <li>만료 임박(5분 이내) 또는 만료 시 자동 갱신 API 호출</li>
+                                    <li>NextResponse.next()의 cookies.set()으로 새 토큰 쿠키 업데이트</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-section">
+                                <h4>결과</h4>
+                                <ul>
+                                    <li>클라이언트/서버 컴포넌트 모두에서 자동 토큰 갱신 구현</li>
+                                    <li>사용자가 갱신 과정을 인지하지 못하는 seamless한 UX 제공</li>
+                                    <li>토큰 만료로 인한 인증 에러 방지 및 안정적인 인증 상태 유지</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Challenge 2: 쿼리 최적화 -->
+                    <div class="resume-wrap d-flex ftco-animate">
+                        <div class="icon d-flex align-items-center justify-content-center">
+                            <span class="flaticon-ideas"></span>
+                        </div>
+                        <div class="text pl-3">
+                            <span class="challenge-badge">CJ CGV 프로젝트</span>
+                            <h2 class="challenge-title">프리퀀시 스탬프 쿼리 성능 최적화 (30초→3초)</h2>
+
+                            <div class="challenge-section">
+                                <h4>문제 상황</h4>
+                                <p>프리퀀시 스탬프 계산 쿼리의 응답 시간이 30초~1분까지 소요되어 사용자 경험에 심각한 문제가 발생했습니다.</p>
+                                <ul>
+                                    <li>복잡한 JOIN과 서브쿼리로 인한 성능 저하</li>
+                                    <li>대량의 데이터 처리 시 응답 지연</li>
+                                    <li>실시간 조회가 필요한 기능에서 사용 불가능한 수준</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-section">
+                                <h4>해결 방법</h4>
+                                <ul>
+                                    <li>메인 테이블 구조 변경 및 인덱스 재설계</li>
+                                    <li>불필요한 JOIN 조건 제거 및 최적화</li>
+                                    <li>실행 계획(Execution Plan) 분석을 통한 병목 지점 파악</li>
+                                    <li>서브쿼리를 CTE(Common Table Expression)로 변환</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-section">
+                                <h4>결과</h4>
+                                <ul>
+                                    <li>쿼리 응답 시간 30초~1분 → 3초 이내로 단축 (90% 개선)</li>
+                                    <li>실시간 조회 기능 정상 작동</li>
+                                    <li>사용자 만족도 크게 향상</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Challenge 3: jChat 메시지 ID 최적화 -->
+                    <div class="resume-wrap d-flex ftco-animate">
+                        <div class="icon d-flex align-items-center justify-content-center">
+                            <span class="flaticon-ideas"></span>
+                        </div>
+                        <div class="text pl-3">
+                            <span class="challenge-badge">jChat 사이드 프로젝트</span>
+                            <h2 class="challenge-title">메시지 ID 생성 성능 최적화 (50ms→1ms)</h2>
+
+                            <div class="challenge-section">
+                                <h4>문제 상황</h4>
+                                <p>메시지 전송 시 DB Sequence 조회로 인한 지연이 발생하여 사용자 체감 속도가 느렸습니다.</p>
+                                <ul>
+                                    <li>메시지 전송 → DB Sequence 조회(50-100ms) → 저장 → 응답</li>
+                                    <li>실시간 채팅 특성상 즉각적인 피드백 필요</li>
+                                    <li>메시지 생성 때마다 DB 조회로 인한 부하</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-section">
+                                <h4>해결 방법</h4>
+                                <p><strong>1) 낙관적 업데이트 (Next.js)</strong></p>
+                                <ul>
+                                    <li>메시지 전송 즉시 임시 ID(UUID)로 UI에 먼저 표시</li>
+                                    <li>React Query의 Optimistic Update 활용</li>
+                                    <li>서버 응답 받으면 임시 ID → 실제 ID로 교체</li>
+                                </ul>
+                                <p><strong>2) Sequence 사전 조회 시스템 (Spring Boot)</strong></p>
+                                <ul>
+                                    <li>메모리에 Sequence를 미리 조회해서 Queue에 보관</li>
+                                    <li>ConcurrentLinkedQueue로 Thread-Safe 구현</li>
+                                    <li>Queue 크기 20개 미만 시 비동기로 50개 조회, 0개 시 동기 조회</li>
+                                    <li>AtomicBoolean으로 조회 중복 방지</li>
+                                </ul>
+                            </div>
+
+                            <div class="challenge-section">
+                                <h4>결과</h4>
+                                <ul>
+                                    <li>메시지 ID 생성 시간 50ms → 1ms 미만으로 단축</li>
+                                    <li>낙관적 업데이트로 사용자 체감 지연 완전 제거</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
